@@ -1,0 +1,59 @@
+name: your_app_name
+description: A new Flutter project.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Packages
+  get: ^4.6.6
+  cupertino_icons: ^1.0.8
+  http: ^1.2.2
+  dio: ^5.4.0
+  shared_preferences: ^2.2.2
+  flutter_svg: ^2.0.9
+  google_fonts: ^6.1.0
+  intl_phone_field: ^3.2.0
+  url_launcher: ^6.2.1
+  share_plus: ^7.2.1
+  video_player: ^2.8.2
+  chewie: ^1.7.4
+  file_picker: ^8.1.2
+  flutter_local_notifications: ^17.2.2
+  visibility_detector: ^0.4.0+2
+  flutter_cache_manager: ^3.3.1
+  path_provider: ^2.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/icons/
+    - assets/images/
+    - assets/icons_bottom_navigation_bar/
+    - assets/developers/
+    - assets/top10/
+    - assets/icons_clips/
+    - assets/change_inventory/
+    - assets/app_icon/
+    - assets/videos/
+    - assets/menu_header.png
+    - assets/orientation_logo.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/app_icon/new_icon_2.png"  # أيقونة التطبيق من مجلد app_icon

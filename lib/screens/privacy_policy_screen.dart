@@ -74,19 +74,93 @@ class PrivacyPolicyScreen extends StatelessWidget {
   }
 
   List<Widget> _buildContentParagraphs() {
-    const loremIpsum = '''Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum''';
-
-    const shortParagraph = '''Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.''';
-
     return [
-      _buildParagraph(loremIpsum),
-      const SizedBox(height: 16),
-      _buildParagraph(shortParagraph),
-      const SizedBox(height: 16),
-      _buildParagraph(loremIpsum),
-      const SizedBox(height: 16),
-      _buildParagraph(shortParagraph),
+      _buildParagraph(
+        'This app respects your privacy and is committed to protecting your personal information.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('Information Collection'),
+      const SizedBox(height: 8),
+      _buildParagraph(
+        'We do not collect personal information such as your name, email, or phone number.',
+      ),
+      const SizedBox(height: 8),
+      _buildParagraph(
+        'The app may collect anonymous usage data or crash reports to improve performance.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('How We Use Data'),
+      const SizedBox(height: 8),
+      _buildParagraph('Collected information is used only to:'),
+      const SizedBox(height: 8),
+      _buildBulletPoint('Improve app stability'),
+      _buildBulletPoint('Fix errors'),
+      _buildBulletPoint('Enhance user experience'),
+      const SizedBox(height: 24),
+      _buildSectionTitle('Third-Party Services'),
+      const SizedBox(height: 8),
+      _buildParagraph(
+        'The app may use services such as Google Play Services or Firebase which may collect anonymous data according to their own privacy policies.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('Data Security'),
+      const SizedBox(height: 8),
+      _buildParagraph(
+        'We take reasonable measures to protect your data from unauthorized access.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('Changes'),
+      const SizedBox(height: 8),
+      _buildParagraph(
+        'This policy may be updated from time to time.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('Contact'),
+      const SizedBox(height: 8),
+      _buildParagraph('For any questions, contact us at:'),
+      const SizedBox(height: 8),
+      _buildParagraph('marketing@orientationre.com'),
     ];
+  }
+
+  Widget _buildSectionTitle(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+
+  Widget _buildBulletPoint(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, bottom: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '• ',
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.8),
+              fontSize: 13,
+              height: 1.6,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.8),
+                fontSize: 13,
+                height: 1.6,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildParagraph(String text) {
@@ -100,4 +174,3 @@ class PrivacyPolicyScreen extends StatelessWidget {
     );
   }
 }
-

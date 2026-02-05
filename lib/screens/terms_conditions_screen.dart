@@ -77,19 +77,85 @@ class TermsConditionsScreen extends StatelessWidget {
   }
 
   List<Widget> _buildContentParagraphs() {
-    const loremIpsum = '''Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum''';
-
-    const shortParagraph = '''Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.''';
-
     return [
-      _buildParagraph(loremIpsum),
-      const SizedBox(height: 16),
-      _buildParagraph(shortParagraph),
-      const SizedBox(height: 16),
-      _buildParagraph(loremIpsum),
-      const SizedBox(height: 16),
-      _buildParagraph(shortParagraph),
+      _buildParagraph(
+        'By downloading, installing, or using the Orientation app, you agree to be '
+        'bound by these Terms and Conditions. If you do not agree, please do not use '
+        'the app.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('Use of the App'),
+      const SizedBox(height: 8),
+      _buildParagraph(
+        'Orientation provides access to curated video content, including short clips, '
+        'episodes, and news. You may use the app for personal, non-commercial purposes '
+        'only. You must not copy, redistribute, or misuse any content or features.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('Account Responsibility'),
+      const SizedBox(height: 8),
+      _buildParagraph(
+        'You are responsible for maintaining the confidentiality of your account '
+        'credentials. Any activity under your account is your responsibility. You must '
+        'notify us promptly of any unauthorized use.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('User Conduct'),
+      const SizedBox(height: 8),
+      _buildParagraph(
+        'You agree not to use the app to violate any laws, infringe on others\' rights, '
+        'or distribute harmful or inappropriate content. We reserve the right to '
+        'suspend or terminate accounts that violate these terms.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('Intellectual Property'),
+      const SizedBox(height: 8),
+      _buildParagraph(
+        'All content, branding, and materials within the app are owned by Orientation '
+        'or its licensors. You may not reproduce, modify, or create derivative works '
+        'without express permission.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('Disclaimer'),
+      const SizedBox(height: 8),
+      _buildParagraph(
+        'The app and its content are provided "as is" without warranties of any kind. '
+        'We do not guarantee uninterrupted access, accuracy of content, or suitability '
+        'for any particular purpose.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('Limitation of Liability'),
+      const SizedBox(height: 8),
+      _buildParagraph(
+        'To the fullest extent permitted by law, Orientation shall not be liable for '
+        'any indirect, incidental, special, or consequential damages arising from your '
+        'use of the app.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('Changes'),
+      const SizedBox(height: 8),
+      _buildParagraph(
+        'We may update these Terms and Conditions from time to time. Continued use of '
+        'the app after changes constitutes acceptance of the updated terms.',
+      ),
+      const SizedBox(height: 24),
+      _buildSectionTitle('Contact'),
+      const SizedBox(height: 8),
+      _buildParagraph('For questions about these terms, contact us at:'),
+      const SizedBox(height: 8),
+      _buildParagraph('marketing@orientationre.com'),
     ];
+  }
+
+  Widget _buildSectionTitle(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+      ),
+    );
   }
 
   Widget _buildParagraph(String text) {
@@ -103,4 +169,3 @@ class TermsConditionsScreen extends StatelessWidget {
     );
   }
 }
-

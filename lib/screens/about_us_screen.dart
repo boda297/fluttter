@@ -77,18 +77,88 @@ class AboutUsScreen extends StatelessWidget {
   }
 
   List<Widget> _buildContentParagraphs() {
-    const loremIpsum = '''Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum''';
-
-    const shortParagraph = '''Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.''';
-
     return [
-      _buildParagraph(loremIpsum),
+      _buildParagraph(
+        'Orientation is a modern mobile platform built for discovering, learning, '
+        'and staying up to date through high-quality curated content. The app brings '
+        'together short-form clips and full-length episodes in one smooth experience, '
+        'helping users explore topics quickly or dive deeper when they want more detail. '
+        'Content is organized into clear sections and collections, making it easy to '
+        'browse by interest, follow trending items, and find something valuable in seconds.',
+      ),
       const SizedBox(height: 16),
-      _buildParagraph(shortParagraph),
+      _buildParagraph(
+        'With Orientation, you can explore projects and episodes, watch engaging '
+        'reels-style videos, and keep track of what you\'ve already viewed so you can '
+        'continue watching right where you left off. The experience is designed to feel '
+        'fast and intuitive: discover new content from the home feed, search by keywords, '
+        'and open detailed pages that provide context, media, and related items. Whether '
+        'you prefer short clips for quick inspiration or longer episodes for focused '
+        'learning, the app supports both styles of consumption.',
+      ),
       const SizedBox(height: 16),
-      _buildParagraph(loremIpsum),
+      _buildParagraph(
+        'Orientation also includes a news section so users can stay connected to the '
+        'latest updates, announcements, and highlights. For those who enjoy curated picks, '
+        'Top 10 lists surface the most relevant and popular items in a simple, visual way. '
+        'You can save favorites to return to later, creating a personal library of content '
+        'you care about.',
+      ),
       const SizedBox(height: 16),
-      _buildParagraph(shortParagraph),
+      _buildParagraph(
+        'The app supports secure authentication and common account flows such as login, '
+        'signup, password recovery, and verification, ensuring a reliable and user-friendly '
+        'onboarding process. After signing in, users can manage basic account details and '
+        'enjoy personalized features like saved content and watch history.',
+      ),
+      const SizedBox(height: 16),
+      _buildParagraph(
+        'The interface is clean, modern, and mobile-first, built with a focus on usability '
+        'and performance. Smooth navigation, clear visual hierarchy, and responsive layouts '
+        'make Orientation comfortable to use on a wide range of devices. Media playback is '
+        'optimized for an enjoyable viewing experience, and the overall design encourages '
+        'exploration without feeling overwhelming.',
+      ),
+      const SizedBox(height: 16),
+      _buildParagraph(
+        'Beyond simple browsing, Orientation is designed to help users build a routine '
+        'around meaningful content. The "continue watching" experience reduces friction by '
+        'remembering progress, while saved items let users create a personal queue for later '
+        'viewing. This makes the app useful in both quick sessions—like a few minutes of '
+        'scrolling through clips—and longer sessions, where users can watch full episodes '
+        'or explore a complete project series.',
+      ),
+      const SizedBox(height: 16),
+      _buildParagraph(
+        'Orientation can serve different audiences and goals. For learners, it\'s a '
+        'structured way to move from bite-sized clips into deeper materials. For fans of '
+        'entertainment and trends, it\'s a fast way to catch highlights, share moments, '
+        'and keep up with what\'s popular. For anyone interested in updates, the news feed '
+        'provides a steady stream of fresh information inside the same app, without forcing '
+        'users to jump between multiple platforms.',
+      ),
+      const SizedBox(height: 16),
+      _buildParagraph(
+        'The content presentation focuses on clarity: strong thumbnails, readable titles, '
+        'and organized sections that help users decide quickly. Search and filtering make '
+        'discovery easier, while detailed screens help users understand what they are '
+        'watching and what to explore next. The app\'s navigation is designed to be '
+        'familiar and consistent, so users always know how to move between home, clips, '
+        'projects, saved items, and account settings.',
+      ),
+      const SizedBox(height: 16),
+      _buildParagraph(
+        'Reliability and user trust are key priorities. Authentication and verification '
+        'flows are built to be straightforward, with clear feedback during sign-in and '
+        'recovery steps. Account screens provide essential details without clutter, so '
+        'users can confidently manage their profile and get back to content quickly.',
+      ),
+      const SizedBox(height: 16),
+      _buildParagraph(
+        'Orientation is ideal for users who want an all-in-one destination for curated '
+        'video content, structured learning, and timely updates—helping them stay informed, '
+        'entertained, and engaged anytime, anywhere.',
+      ),
     ];
   }
 
@@ -103,4 +173,3 @@ class AboutUsScreen extends StatelessWidget {
     );
   }
 }
-

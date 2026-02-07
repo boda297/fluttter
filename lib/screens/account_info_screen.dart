@@ -15,7 +15,7 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
   final _phoneController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  
+
   final _authApi = AuthApi();
   bool _isLoading = false;
   bool _isLoadingData = true;
@@ -45,13 +45,13 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
 
     try {
       final profile = await _authApi.getUserProfile();
-      
+
       if (mounted) {
         // Get email from stored user info to ensure it has @
         final userInfo = await _authApi.getStoredUserInfo();
         final storedEmail = userInfo['email'] ?? '';
         final profileEmail = profile['email'] ?? '';
-        
+
         // Prioritize email with @ symbol
         String emailToUse = '';
         if (storedEmail.isNotEmpty && storedEmail.contains('@')) {
@@ -63,7 +63,7 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
         } else if (profileEmail.isNotEmpty) {
           emailToUse = profileEmail;
         }
-        
+
         // If email doesn't contain @, try to reconstruct it
         if (emailToUse.isNotEmpty && !emailToUse.contains('@')) {
           // Try to add @ if it's missing (e.g., "mohmed gmail.com" -> "mohmed@gmail.com")
@@ -73,7 +73,7 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
             emailToUse = '${parts[0]}@${parts.sublist(1).join('')}';
           }
         }
-        
+
         setState(() {
           _firstNameController.text = profile['firstName'] ?? '';
           _lastNameController.text = profile['lastName'] ?? '';
@@ -122,7 +122,8 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
     }
 
     // Validation for password (if provided)
-    if (_newPasswordController.text.isNotEmpty || _confirmPasswordController.text.isNotEmpty) {
+    if (_newPasswordController.text.isNotEmpty ||
+        _confirmPasswordController.text.isNotEmpty) {
       if (_newPasswordController.text.isEmpty) {
         _showSnackBar('Please enter a new password', isError: true);
         return;
@@ -148,10 +149,11 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
       // Update profile - ensure email is preserved with @
       final emailText = _emailController.text.trim();
       if (!emailText.contains('@')) {
-        _showSnackBar('Please enter a valid email address with @', isError: true);
+        _showSnackBar('Please enter a valid email address with @',
+            isError: true);
         return;
       }
-      
+
       await _authApi.updateProfile(
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
@@ -172,15 +174,16 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
         });
 
         _showSnackBar('Profile updated successfully!', isSuccess: true);
-        
+
         // Clear password fields
         _newPasswordController.clear();
         _confirmPasswordController.clear();
-        
+
         // Navigate back after a short delay with result to refresh AccountScreen
         Future.delayed(const Duration(seconds: 1), () {
           if (mounted) {
-            Navigator.pop(context, true); // Pass true to indicate profile was updated
+            Navigator.pop(
+                context, true); // Pass true to indicate profile was updated
           }
         });
       }
@@ -195,7 +198,8 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
     }
   }
 
-  void _showSnackBar(String message, {bool isError = false, bool isSuccess = false}) {
+  void _showSnackBar(String message,
+      {bool isError = false, bool isSuccess = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -246,62 +250,62 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
                               ),
                             ),
                           ],
-                    // Edit Personal Info section
-                    const Text(
-                      'Edit Personal Info',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
+                          // Edit Personal Info section
+                          const Text(
+                            'Edit Personal Info',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          _buildTextField(
+                            controller: _firstNameController,
+                            hint: 'First Name*',
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTextField(
+                            controller: _lastNameController,
+                            hint: 'Last Name*',
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTextField(
+                            controller: _emailController,
+                            hint: 'Email*',
+                            keyboardType: TextInputType.emailAddress,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTextField(
+                            controller: _phoneController,
+                            hint: 'Phone Number*',
+                            keyboardType: TextInputType.phone,
+                          ),
+                          const SizedBox(height: 32),
+                          // Edit Password section
+                          const Text(
+                            'Edit Password',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          _buildTextField(
+                            controller: _newPasswordController,
+                            hint: 'New Password',
+                            isPassword: true,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTextField(
+                            controller: _confirmPasswordController,
+                            hint: 'Confirm Password',
+                            isPassword: true,
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    _buildTextField(
-                      controller: _firstNameController,
-                      hint: 'First Name*',
-                    ),
-                    const SizedBox(height: 16),
-                    _buildTextField(
-                      controller: _lastNameController,
-                      hint: 'Last Name*',
-                    ),
-                    const SizedBox(height: 16),
-                    _buildTextField(
-                      controller: _emailController,
-                      hint: 'Email*',
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(height: 16),
-                    _buildTextField(
-                      controller: _phoneController,
-                      hint: 'Phone Number*',
-                      keyboardType: TextInputType.phone,
-                    ),
-                    const SizedBox(height: 32),
-                    // Edit Password section
-                    const Text(
-                      'Edit Password',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    _buildTextField(
-                      controller: _newPasswordController,
-                      hint: 'New Password',
-                      isPassword: true,
-                    ),
-                    const SizedBox(height: 16),
-                    _buildTextField(
-                      controller: _confirmPasswordController,
-                      hint: 'Confirm Password',
-                      isPassword: true,
-                    ),
-                  ],
-                ),
-              ),
             ),
             // Save button
             Padding(
@@ -325,7 +329,8 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         )
                       : const Text(
@@ -413,4 +418,3 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
     );
   }
 }
-

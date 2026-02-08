@@ -28,7 +28,7 @@ class ReelsPlayerScreen extends StatefulWidget {
 class _ReelsPlayerScreenState extends State<ReelsPlayerScreen>
     with WidgetsBindingObserver {
   late PageController _pageController;
-  late final ClipService _clipService;
+  ClipService? _clipService;
   final Map<int, VideoPlayerController> _controllers =
       {}; // Direct video controllers
   final Map<int, ClipModel> _clipsCache = {}; // Cache updated clips by index
@@ -43,7 +43,11 @@ class _ReelsPlayerScreenState extends State<ReelsPlayerScreen>
   @override
   void initState() {
     super.initState();
-    _clipService = Get.find<ClipService>();
+    try {
+      if (Get.isRegistered<ClipService>()) {
+        _clipService = Get.find<ClipService>();
+      }
+    } catch (_) {}
     WidgetsBinding.instance.addObserver(this);
     _currentIndex = widget.initialIndex;
     _pageController = PageController(initialPage: widget.initialIndex);
@@ -92,12 +96,13 @@ class _ReelsPlayerScreenState extends State<ReelsPlayerScreen>
   }
 
   Future<void> _loadLikedStatus() async {
+    if (_clipService == null) return;
     PerformanceMonitor.start('Load liked status');
     // Batch all updates and call setState once (eliminates N rebuilds)
     final Map<int, ClipModel> updates = {};
     for (int i = 0; i < widget.clips.length; i++) {
       final clip = widget.clips[i];
-      final isLiked = await _clipService.isClipLiked(clip.id);
+      final isLiked = await _clipService!.isClipLiked(clip.id);
       updates[i] = clip.copyWith(isLiked: isLiked);
     }
     if (mounted) {
@@ -109,10 +114,10 @@ class _ReelsPlayerScreenState extends State<ReelsPlayerScreen>
   }
 
   Future<void> _loadSavedStatus() async {
-    if (!mounted) return;
+    if (!mounted || _clipService == null) return;
     try {
       // Load all saved reels once instead of checking each one individually
-      final savedReels = await _clipService.getSavedReels();
+      final savedReels = await _clipService!.getSavedReels();
       if (mounted) {
         setState(() {
           _savedReelIds.clear();
@@ -226,7 +231,7 @@ class _ReelsPlayerScreenState extends State<ReelsPlayerScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _clipService.flush(); // Persist liked clips before leaving
+    _clipService?.flush(); // Persist liked clips before leaving
     // Remove all listeners and dispose controllers
     try {
       for (var entry in _controllers.entries) {
@@ -251,7 +256,7 @@ class _ReelsPlayerScreenState extends State<ReelsPlayerScreen>
 
   Future<void> _toggleLike(int index) async {
     if (index < 0 || index >= widget.clips.length) return;
-    if (!mounted) return;
+    if (!mounted || _clipService == null) return;
 
     final clip = _clipsCache[index] ?? widget.clips[index];
     final isCurrentlyLiked = clip.isLiked;
@@ -259,8 +264,8 @@ class _ReelsPlayerScreenState extends State<ReelsPlayerScreen>
     try {
       // Optimistic update - API handles the UI update immediately
       final updatedClip = isCurrentlyLiked
-          ? await _clipService.unlikeClip(clip.id)
-          : await _clipService.likeClip(clip.id);
+          ? await _clipService!.unlikeClip(clip.id)
+          : await _clipService!.likeClip(clip.id);
 
       if (mounted) {
         setState(() {
@@ -299,7 +304,7 @@ class _ReelsPlayerScreenState extends State<ReelsPlayerScreen>
   }
 
   Future<void> _toggleSave(int index) async {
-    if (!mounted) return;
+    if (!mounted || _clipService == null) return;
     if (index < 0 || index >= widget.clips.length) return;
 
     final isAuth = await AuthHelper.requireAuth(context);
@@ -317,7 +322,7 @@ class _ReelsPlayerScreenState extends State<ReelsPlayerScreen>
 
     try {
       if (!isCurrentlySaved) {
-        final success = await _clipService.saveReel(clip.id);
+        final success = await _clipService!.saveReel(clip.id);
         if (success) {
           if (mounted) _showSnackBar('Saved!', isSuccess: true);
         } else {
@@ -330,7 +335,7 @@ class _ReelsPlayerScreenState extends State<ReelsPlayerScreen>
           }
         }
       } else {
-        final success = await _clipService.unsaveReel(clip.id);
+        final success = await _clipService!.unsaveReel(clip.id);
         if (success) {
           if (mounted) _showSnackBar('Removed from saved', isSuccess: true);
         } else {
@@ -344,7 +349,7 @@ class _ReelsPlayerScreenState extends State<ReelsPlayerScreen>
         }
       }
     } catch (e) {
-      print('❌ Error in _toggleSave: $e');
+      debugPrint('Error in _toggleSave: $e');
       // Revert on error
       if (mounted) {
         setState(() {

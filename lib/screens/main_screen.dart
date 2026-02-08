@@ -119,6 +119,7 @@ class _MainScreenState extends State<MainScreen> {
             // Clips, News, or Account tabs - require auth
             final isAuth = await AuthHelper.requireAuth(context);
             if (!isAuth) return;
+            if (!mounted) return;
 
             // Update clips visibility
             if (index == 1) {

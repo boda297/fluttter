@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -10,45 +12,66 @@ import 'services/api/project_api.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-    ),
-  );
 
-  // Clear video caches on app start (videos are not cached anymore)
+  FlutterError.onError = (FlutterErrorDetails details) {
+    if (kDebugMode) {
+      FlutterError.presentError(details);
+    }
+    if (kReleaseMode) {
+      FlutterError.dumpErrorToConsole(details);
+    }
+  };
+
+  runZonedGuarded(() async {
+    await _initializeApp();
+    runApp(const OrientationApp());
+  }, (error, stack) {
+    if (kDebugMode) {
+      // ignore: avoid_print
+      print('Zone error: $error\n$stack');
+    }
+  });
+}
+
+Future<void> _initializeApp() async {
+  try {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
+  } catch (_) {}
+
   try {
     final cacheService = CacheService();
     await cacheService.clearReelsCache();
-    print('🗑️ Video caches cleared on app start');
+    if (kDebugMode) debugPrint('Video caches cleared on app start');
   } catch (e) {
-    print('⚠️ Error clearing video caches: $e');
+    if (kDebugMode) debugPrint('Error clearing video caches: $e');
   }
 
-  // Initialize notification service to start periodic checks
-  final notificationService = NotificationService();
-  await notificationService.initialize();
+  try {
+    final notificationService = NotificationService();
+    await notificationService.initialize();
+    if (kDebugMode) debugPrint('Notification service initialized');
+  } catch (e) {
+    if (kDebugMode) debugPrint('Notification init error (non-fatal): $e');
+  }
 
-  // Note: Background tasks using workmanager are temporarily disabled
-  // The periodic check will work when the app is open (every 5 minutes)
-  // To enable background tasks, uncomment the workmanager code below
-  // and ensure workmanager package is properly installed
-
-  print('✅ Notification service initialized');
-
-  // Register clip-related services for dependency injection
-  Get.put(ImprovedClipApi(), permanent: true);
-  Get.put(ProjectApi(), permanent: true);
-  Get.put(
-    ClipService(
-      clipApi: Get.find<ImprovedClipApi>(),
-      projectApi: Get.find<ProjectApi>(),
-    ),
-    permanent: true,
-  );
-
-  runApp(const OrientationApp());
+  try {
+    Get.put(ImprovedClipApi(), permanent: true);
+    Get.put(ProjectApi(), permanent: true);
+    Get.put(
+      ClipService(
+        clipApi: Get.find<ImprovedClipApi>(),
+        projectApi: Get.find<ProjectApi>(),
+      ),
+      permanent: true,
+    );
+  } catch (e) {
+    if (kDebugMode) debugPrint('Get.put init error (non-fatal): $e');
+  }
 }
 
 class OrientationApp extends StatefulWidget {
@@ -76,7 +99,11 @@ class _OrientationAppState extends State<OrientationApp>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
-      Get.find<ClipService>().flush();
+      try {
+        if (Get.isRegistered<ClipService>()) {
+          Get.find<ClipService>().flush();
+        }
+      } catch (_) {}
     }
   }
 

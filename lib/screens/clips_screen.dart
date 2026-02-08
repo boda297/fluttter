@@ -561,6 +561,10 @@ class ClipsScreenState extends State<ClipsScreen> {
 
   Future<void> _loadClips() async {
     try {
+      if (!getx.Get.isRegistered<ClipService>()) {
+        if (mounted) setState(() => _isLoading = false);
+        return;
+      }
       final clipService = getx.Get.find<ClipService>();
       final clips = await clipService.getClips(page: 1, limit: 5);
       if (mounted) {

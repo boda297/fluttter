@@ -14,6 +14,7 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _progressAnimation;
+  bool _didNavigate = false;
 
   @override
   void initState() {
@@ -33,17 +34,22 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // Navigate to main screen after loading completes (allow browsing without login)
     _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        if (mounted) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => const MainScreen(),
-            ),
-          );
-        }
-      }
+      if (status != AnimationStatus.completed || _didNavigate) return;
+      try {
+        if (!mounted) return;
+        _didNavigate = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted || !_didNavigate) return;
+          try {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const MainScreen(),
+              ),
+            );
+          } catch (_) {}
+        });
+      } catch (_) {}
     });
   }
 

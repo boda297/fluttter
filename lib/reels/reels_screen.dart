@@ -32,7 +32,7 @@ class ReelsScreenState extends State<ReelsScreen> with WidgetsBindingObserver {
   late PageController _pageController;
   final ReelsController _reelsController = ReelsController();
   final ReelsVideoManager _videoManager = ReelsVideoManager();
-  late final ClipService _clipService;
+  ClipService? _clipService;
 
   // UI state
   final Map<int, ClipModel> _clipsCache = {}; // Cache updated clips by index
@@ -44,7 +44,11 @@ class ReelsScreenState extends State<ReelsScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    _clipService = Get.find<ClipService>();
+    try {
+      if (Get.isRegistered<ClipService>()) {
+        _clipService = Get.find<ClipService>();
+      }
+    } catch (_) {}
     WidgetsBinding.instance.addObserver(this);
     _reelsController.currentIndex = widget.initialIndex;
     _pageController = PageController(initialPage: widget.initialIndex);
@@ -94,9 +98,9 @@ class ReelsScreenState extends State<ReelsScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _loadSavedStatus() async {
-    if (!mounted) return;
+    if (!mounted || _clipService == null) return;
     try {
-      final savedReels = await _clipService.getSavedReels();
+      final savedReels = await _clipService!.getSavedReels();
       if (mounted) {
         setState(() {
           _savedReelIds.clear();
@@ -170,7 +174,7 @@ class ReelsScreenState extends State<ReelsScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _clipService.flush();
+    _clipService?.flush();
     _videoManager.disposeAll();
     _reelsController.dispose();
     _pageController.dispose();
@@ -185,7 +189,7 @@ class ReelsScreenState extends State<ReelsScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _toggleSave(int index) async {
-    if (!mounted) return;
+    if (!mounted || _clipService == null) return;
     if (index < 0 || index >= widget.clips.length) return;
 
     final isAuth = await AuthHelper.requireAuth(context);
@@ -203,7 +207,7 @@ class ReelsScreenState extends State<ReelsScreen> with WidgetsBindingObserver {
 
     try {
       if (!isCurrentlySaved) {
-        final success = await _clipService.saveReel(clip.id);
+        final success = await _clipService!.saveReel(clip.id);
         if (success) {
           if (mounted) _showSnackBar('Saved!', isSuccess: true);
         } else {
@@ -215,7 +219,7 @@ class ReelsScreenState extends State<ReelsScreen> with WidgetsBindingObserver {
           }
         }
       } else {
-        final success = await _clipService.unsaveReel(clip.id);
+        final success = await _clipService!.unsaveReel(clip.id);
         if (success) {
           if (mounted) _showSnackBar('Removed from saved', isSuccess: true);
         } else {

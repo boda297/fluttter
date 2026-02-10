@@ -1,0 +1,2 @@
+--max-heap-size=1024m
+--old-gen-heap-size=768m

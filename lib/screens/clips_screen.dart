@@ -604,6 +604,11 @@ class ClipsScreenState extends State<ClipsScreen> {
         ),
       );
     }
-    return ReelsScreen(key: _reelsKey, clips: _clips, initialIndex: 0);
+    return ReelsScreen(
+      key: _reelsKey,
+      clips: _clips,
+      initialIndex: 0,
+      initialVisible: false,
+    );
   }
 }
